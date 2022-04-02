@@ -15,7 +15,7 @@ TG_API_HOST = 'api.telegram.org'  # 自建 API 反代地址，供网络环境无
 
 
 def telegram(desp):
-    data = (('chat_id', TG_USER_ID), ('text', '🐢甲骨文ARM抢注脚本为您播报🐢 \n\n' + desp))
+    data = (('chat_id', TG_USER_ID), ('text', '🐢 甲骨文ARM抢注脚本为您播报 🐢 \n\n' + desp))
     response = requests.post('https://' + TG_API_HOST + '/bot' + TG_BOT_TOKEN +
                              '/sendMessage',
                              data=data)
@@ -196,7 +196,7 @@ class FileParser:
 
 class InsCreate:
     shape = 'VM.Standard.A1.Flex'
-    sleep_time = 5.0
+    sleep_time = 10.0
     try_count = 0
     desp = ""
 
@@ -220,7 +220,7 @@ class InsCreate:
     def create(self):
         # print("与运行创建活动")
         # 开启一个tg的原始推送
-        text = "脚本开始启动:\n,区域:{}-实例:{},CPU:{}C-内存:{}G-硬盘:{}G的小🐔已经快马加鞭抢购了\n".format(
+        text = "脚本已启动:\n正在极速抢注以下配置小🐔\n\n区域: {}\n实例: {}\nCPU: {}C\n内存: {}G\n硬盘: {}G\n".format(
             self.tf.availability_domain, self.tf.display_name, self.tf.ocpus,
             self.tf.memory_in_gbs, self.tf.boot_volume_size_in_gbs)
         telegram(text)
@@ -239,15 +239,15 @@ class InsCreate:
                     if "Service limit" in e.message and e.status==400:
 
                         # 可能是别的错误，也有可能是 达到上限了，要去查看一下是否开通成功，也有可能错误了
-                        self.logp("❌如果看到这条推送,说明刷到机器，但是开通失败了，请后台检查你的cpu，内存，硬盘占用情况，并释放对应的资源 返回值:{},\n 脚本停止".format(e))
+                        self.logp("❌ 如果看到这条推送,说明刷到机器，但是开通失败了，请后台检查你的cpu，内存，硬盘占用情况，并释放对应的资源 返回值:{},\n 脚本停止".format(e))
                     else:
-                        self.logp("❌发生错误,脚本停止!请检查参数或github反馈/查找 相关问题:{}".format(e))
+                        self.logp("❌ 发生错误,脚本停止! 相关问题:{}".format(e))
                     telegram(self.desp)
                     raise e
                 else:
                     # 没有被限速，恢复减少的时间
                     print("目前没有请求限速,快马加刷中")
-                    if self.sleep_time > 15:
+                    if self.sleep_time > 20:
                         self.sleep_time -= 10
                 print("本次返回信息:",e)
                 time.sleep(self.sleep_time)
@@ -256,12 +256,13 @@ class InsCreate:
                 #  可以等一会去请求实例的ip
                 # print("开通成功之后的ins:\n\n", ins, type(ins))
                 self.logp(
-                    "🎉经过 {} 尝试后\n 区域:{}实例:{}-CPU:{}C-内存:{}G🐔创建成功了🎉\n".format(
+                    "🎉 经过 {} 尝试后\n 区域: {}\n实例: {}\nCPU: {}C\n内存: {}G\n硬盘: {}G\\🐔 已创建成功了 🎉\n".format(
                         self.try_count + 1,
                         self.tf.availability_domain,
                         self.tf.display_name,
                         self.tf.ocpus,
                         self.tf.memory_in_gbs,
+                        self.tf.boot_volume_size_in_gbs
                     ))
                 self.ins_id = ins.id
                 self.logp("ssh登陆密码: {} \n".format(self._pwd))
@@ -286,7 +287,7 @@ class InsCreate:
                 print("开始查找vnic id ")
                 vnic_id = data[0].vnic_id
                 public_ip = network_client.get_vnic(vnic_id).data.public_ip
-                self.logp("公网ip为:{}\n 🐢脚本停止，感谢使用😄\n".format(public_ip))
+                self.logp("公网ip为:{}\n 🐢 脚本停止，感谢使用😄 \n".format(public_ip))
                 self.public_ip = public_ip
                 return 
             time.sleep(5)
