@@ -1,3 +1,7 @@
+# oracle-arm
+Oracle cloud arm server auto-snap script 甲骨文乌龟壳自动抢ARM脚本
+![visitors](https://visitor-badge.glitch.me/badge?page_id=cimmu.oracle-arm)
+
 # 本脚本优点
 
 简单,主机配置好 oci config，然后下载 main.tf 即可，不用自己解析各种参数,自动设置ssh登陆密码。
