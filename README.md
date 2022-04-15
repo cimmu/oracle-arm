@@ -10,4 +10,4 @@ oci 请求几乎无延迟（为了保险起见加了10s的间隔，会自动判�
 
 自动获取开机的**公网IP**，无需登陆后台即可ssh上🐔。
 
-完整使用教程 [传送](https://blog.iyume.top/other/136.html)
+[点击查看完整使用教程](https://blog.iyume.top/other/136.html)
