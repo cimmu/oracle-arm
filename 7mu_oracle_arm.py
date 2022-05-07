@@ -220,7 +220,7 @@ class InsCreate:
     def create(self):
         # print("与运行创建活动")
         # 开启一个tg的原始推送
-        text = "脚本已启动:\n正在极速抢注以下配置小🐔\n\n区域: {}\n实例: {}\nCPU: {}C\n内存: {}G\n硬盘: {}G\n".format(
+        text = "脚本已启动:\n正在极速抢注以下配置小🐔\n\n区域: {}\n实例: {}\nCPU: {}C\n内存: {}G\n硬盘: {}G\n\n博客: https://blog.iyume.top".format(
             self.tf.availability_domain, self.tf.display_name, self.tf.ocpus,
             self.tf.memory_in_gbs, self.tf.boot_volume_size_in_gbs)
         telegram(text)
@@ -231,7 +231,7 @@ class InsCreate:
             except oci.exceptions.ServiceError as e:
                 if e.status == 429 and e.code == 'TooManyRequests' and e.message == 'Too many requests for the user':
                     # 被限速了，改一下时间
-                    print("请求太快了，自动调整请求时间ing")
+                    print("请求太快了，正在自动调整请求时间")
                     if self.sleep_time < 60:
                         self.sleep_time += 10
                 elif not (e.status == 500 and e.code == 'InternalError'
@@ -239,24 +239,21 @@ class InsCreate:
                     if "Service limit" in e.message and e.status==400:
 
                         # 可能是别的错误，也有可能是 达到上限了，要去查看一下是否开通成功，也有可能错误了
-                        self.logp("❌ 如果看到这条推送,说明刷到机器，但是开通失败了，请后台检查你的cpu，内存，硬盘占用情况，并释放对应的资源 返回值:{},\n 脚本停止".format(e))
+                        self.logp("❌ 如果看到这条推送，说明刷到机器，但是开通失败了，请后台检查你的cpu，内存，硬盘占用情况，并释放对应的资源 返回值:{},\n 脚本停止".format(e))
                     else:
-                        self.logp("❌ 发生错误,脚本停止! 相关问题:{}".format(e))
+                        self.logp("❌ 发生错误，脚本停止！相关问题:{}".format(e))
                     telegram(self.desp)
                     raise e
                 else:
                     # 没有被限速，恢复减少的时间
-                    print("目前没有请求限速,快马加刷中")
+                    print("目前没有请求限速，快马加刷中")
                     if self.sleep_time > 20:
                         self.sleep_time -= 10
                 print("本次返回信息:",e)
                 time.sleep(self.sleep_time)
             else:
-                #  开通成功 ，ins 就是返回的数据
-                #  可以等一会去请求实例的ip
-                # print("开通成功之后的ins:\n\n", ins, type(ins))
                 self.logp(
-                    "🎉 经过 {} 尝试后\n 区域: {}\n实例: {}\nCPU: {}C\n内存: {}G\n硬盘: {}G\\🐔 已创建成功了 🎉\n".format(
+                    "🎉 经过 {} 尝试后\n区域编号: {}\n实例名称: {}\nCPU核数: {}C\n内存大小: {}G\n硬盘容量: {}G\n🐔 已创建成功 🎉\n".format(
                         self.try_count + 1,
                         self.tf.availability_domain,
                         self.tf.display_name,
@@ -265,7 +262,7 @@ class InsCreate:
                         self.tf.boot_volume_size_in_gbs
                     ))
                 self.ins_id = ins.id
-                self.logp("ssh登陆密码: {} \n".format(self._pwd))
+                self.logp("SSH密码: {} \n".format(self._pwd))
                 self.check_public_ip()
 
                 telegram(self.desp)
@@ -287,12 +284,13 @@ class InsCreate:
                 print("开始查找vnic id ")
                 vnic_id = data[0].vnic_id
                 public_ip = network_client.get_vnic(vnic_id).data.public_ip
-                self.logp("公网ip为:{}\n 🐢 脚本停止，感谢使用😄 \n".format(public_ip))
+                self.logp("公网ip为:{}\n🐢 脚本停止，感谢使用 😄 \n".format(public_ip))
                 self.public_ip = public_ip
+                self.logp("博客: https://blog.iyume.top")
                 return 
             time.sleep(5)
             count-=1
-        self.logp("开机失败，被他娘甲骨文给关掉了😠，脚本停止，请重新运行\n")
+        self.logp("开机失败，机器被甲骨文给关掉了😠，脚本停止，请重新运行\n")
         
     def lunch_instance(self):
         return self._client.launch_instance(
