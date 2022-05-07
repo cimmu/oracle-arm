@@ -11,3 +11,7 @@ oci 请求几乎无延迟（为了保险起见加了10s的间隔，会自动判�
 自动获取开机的**公网IP**，无需登陆后台即可ssh上🐔。
 
 [点击查看完整使用教程](https://blog.iyume.top/other/136.html)
+
+2022年5月6号首尔ARM开机成功
+
+![image](https://dd-static.jd.com/ddimg/jfs/t1/208648/25/21543/18619/62766615Ed75d301d/38c3e632b3f99bb6.png)
