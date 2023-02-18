@@ -1,3 +1,7 @@
+### Star History 点亮项目星星！
+
+[![Star History Chart](https://api.star-history.com/svg?repos=cimmu/oracle-arm&type=Date)](https://star-history.com/#cimmu/oracle-arm&Date)
+
 # oracle-arm
 Oracle cloud arm server auto-snap script 甲骨文乌龟壳自动抢ARM脚本
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=cimmu.oracle-arm)
